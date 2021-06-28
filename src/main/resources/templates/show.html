@@ -1,0 +1,135 @@
+<!DOCTYPE html >
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>农业信息导航</title>
+    <link rel="shortcut icon" href="../static/favicon.ico" th:href="@{favicon.ico}"/>
+    <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link href="../static/css/style.min.css" th:href="@{/css/show.css}" rel="stylesheet"/>
+</head>
+<body>
+<div class="container0" id="container0">
+    <aside class="left-bar" id="leftBar">
+        <div class="title">
+            <h3>农业信息导航</h3>
+        </div>
+        <nav class="nav">
+            <div class="item active"><a href=""><i class="iconfont icon-daohang2"></i>导航目录</a><i class="line"></i></div>
+            <ul class="nav-item" id="navItem">
+                <li><a href="#study"><i class="iconfont icon-xuexi1"></i>学无止境</a></li>
+            </ul>
+        </nav>
+    </aside>
+    <section class="main">
+        <div id="mainContent">
+            <!-- 手机端菜单 -->
+            <div id="menu-box">
+                <div id="menu">
+                    <input type="checkbox" id="menu-form">
+                    <label for="menu-form" class="menu-spin">
+                        <div class="line diagonal line-1"></div>
+                        <div class="line horizontal"></div>
+                        <div class="line diagonal line-2"></div>
+                    </label>
+                </div>
+            </div>
+            <div th:each="sites,status:${sitesList}" class="box">
+                <div class="sub-category">
+                    <div th:text="${kinds[status.index].name}"><i class="iconfont icon-xuexi1"></i></div>
+                </div>
+
+                <div th:each="site:${sites}">
+                    <a target="_blank" th:href="@{${site.url}}">
+                        <div class="item">
+                            <span class="no-logo" th:text="${site.name}">  </span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <footer class="footer">
+                <div class="copyright">
+                    <div>
+                        <a href="/index">
+                            <button type="button" class="btn btn-warning btn-sm">
+                                管理员登录
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </footer>
+            <div id="fixedBar">
+                <svg class="Zi Zi--BackToTop" title="回到顶部" fill="currentColor" viewBox="0 0 24 24" width="24"
+                     height="24">
+                    <path d="M16.036 19.59a1 1 0 0 1-.997.995H9.032a.996.996 0 0 1-.997-.996v-7.005H5.03c-1.1 0-1.36-.633-.578-1.416L11.33 4.29a1.003 1.003 0 0 1 1.412 0l6.878 6.88c.782.78.523 1.415-.58 1.415h-3.004v7.005z"></path>
+                </svg>
+            </div>
+        </div>
+    </section>
+</div>
+<script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+<script src="../static/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+<script>
+    let oMenu = document.getElementById('menu');
+    let oLeftBar = document.getElementById('leftBar');
+    let menuFrom = document.getElementById('menu-form');
+
+    oMenu.onclick = function () {
+        if (oLeftBar.offsetLeft == 0) {
+            oLeftBar.style.left = -249 + 'px';
+        } else {
+            oLeftBar.style.left = 0;
+        }
+    }
+
+
+    // 监听页面宽度变化
+    window.onresize = function () {
+        judgeWidth();
+        // console.log(document.documentElement.clientWidth);
+    };
+
+    // 判断页面宽度
+    function judgeWidth() {
+        if (document.documentElement.clientWidth > 481) {
+            oLeftBar.style.left = 0;
+        } else {
+            oLeftBar.style.left = -249 + 'px';
+        }
+    }
+
+
+    let oNavItem = document.getElementById('navItem');
+    let aA = oNavItem.getElementsByTagName('a');
+    for (var i = 0; i < aA.length; i++) {
+        aA[i].onclick = function () {
+            for (var j = 0; j < aA.length; j++) {
+                aA[j].className = '';
+            }
+            this.className = 'active';
+            if (oLeftBar.offsetLeft == 0) {
+                if (document.documentElement.clientWidth <= 481) {
+                    oLeftBar.style.left = -249 + 'px';
+                    menuFrom.checked = false;
+
+                }
+            }
+        }
+    }
+
+
+    $(window).scroll(function () {
+        if ($(window).scrollTop() >= 200) {
+            $('#fixedBar').fadeIn(300);
+        } else {
+            $('#fixedBar').fadeOut(300);
+        }
+    });
+    $('#fixedBar').click(function () {
+        $('html,body').animate({scrollTop: '0px'}, 800);
+    })
+</script>
+</body>
+</html>

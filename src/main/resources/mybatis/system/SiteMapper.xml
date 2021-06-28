@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.site.mapper.SiteMapper">
+    
+    <resultMap type="Site" id="SiteResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="url"    column="url"    />
+        <result property="kindid"    column="kindid"    />
+    </resultMap>
+
+    <sql id="selectSiteVo">
+        select id, name, url, kindid from sys_site
+    </sql>
+
+    <select id="selectSiteList" parameterType="Site" resultMap="SiteResult">
+        <include refid="selectSiteVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="url != null  and url != ''"> and url = #{url}</if>
+            <if test="kindid != null "> and kindid = #{kindid}</if>
+        </where>
+    </select>
+    
+    <select id="selectSiteById" parameterType="Long" resultMap="SiteResult">
+        <include refid="selectSiteVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectSiteListByKind" parameterType="Long" resultMap="SiteResult">
+        <include refid="selectSiteVo"/>
+        where kindid = #{kindId}
+    </select>
+        
+    <insert id="insertSite" parameterType="Site">
+        insert into sys_site
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="url != null and url != ''">url,</if>
+            <if test="kindid != null">kindid,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="url != null and url != ''">#{url},</if>
+            <if test="kindid != null">#{kindid},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSite" parameterType="Site">
+        update sys_site
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="url != null and url != ''">url = #{url},</if>
+            <if test="kindid != null">kindid = #{kindid},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSiteById" parameterType="Long">
+        delete from sys_site where id = #{id}
+    </delete>
+
+    <delete id="deleteSiteByIds" parameterType="String">
+        delete from sys_site where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
