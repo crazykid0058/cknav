@@ -2,7 +2,7 @@
 
 展示界面http://localhost/show
 
-后台默认密码admin/admin123  
+
 
 
 
